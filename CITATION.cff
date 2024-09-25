@@ -1,0 +1,17 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: MPC for cart pendulum stabilization
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Juan Augusto
+    family-names: Paredes Salazar
+    name-particle: Juan Augusto
+    email: juan.augusto.paredes@gmail.com
+    orcid: 'https://orcid.org/0000-0001-7486-1231'
+repository-code: >-
+  https://github.com/JAParedes/MPC-for-cart-pendulum-stabilization
