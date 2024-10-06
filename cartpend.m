@@ -1,6 +1,6 @@
 function xdot = cartpend(t, x, u, m, M, L, J)
 
-%Cart-Pendulum System Dynamcs
+%Inverted Pendulum on a Cart System Dynamcs
 %Parameters
 g = 9.80655;
 a = (J + m*L^2);

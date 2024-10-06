@@ -188,7 +188,7 @@ skm1 = zeros(N,1);
 lkm1 = zeros(4*N,1);
 vkm1 = zeros(11*N,1);
 tfinal = 10; %Total simulation time
-nsim = ceil(tfinal/ts); %Number of iterations for simulation given time step
+nsim = ceil(tfinal/ts) + 1; %Number of iterations for simulation given time step
 
 %Matrices for storing time, state and input data from simulation in case 1
 X = zeros(4,nsim);
@@ -243,14 +243,14 @@ for i = 1:nsim-1
     U(:,i) = u_nmpc;
     t1(i) = (i-1)*ts;
 
-    perc = i/nsim
+    percentage_done = i/nsim
 end
 
-X(3,:) = wrapToPi(X(3,:));
+%X(3,:) = wrapToPi(X(3,:));
 
 U(:,nsim) = U(:,nsim-1);
 res1(nsim) = 0;
-t1(nsim) = nsim*ts;
+t1(nsim) = (nsim-1)*ts;
 
 subplot(3,1,1)
 plot(t1,X(1,:), 'LineWidth',2)
@@ -271,5 +271,17 @@ plot(t1,U,'LineWidth',2)
 xlabel('t (sec)')
 ylabel('Horizontal Force (N)')
 legend('u(t)')
+
+%% Saving for animation (uncomment)
+
+% Ts = ts;
+% pos = X(1,:);
+% vel = X(2,:);
+% ang = X(3,:);
+% angvel = X(4,:);
+% inp = U;
+% tt = t1.';
+% 
+% save('Inverted_Pendulum_on_a_Cart_Swing_Up_Switching_MPC.mat','Ts','pos','vel','ang','angvel','inp','tt')
 
 %End Program

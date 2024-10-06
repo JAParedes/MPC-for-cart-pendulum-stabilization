@@ -78,7 +78,7 @@ Xk = zeros(4,length(t));
 Uk = zeros(1,length(t));
 
 %Desired final position
-r = 50;
+r = 15;
 rvec = [r; 0; 0; 0];
 
 %Initial conditions
@@ -87,6 +87,7 @@ tm = 0;
 
 X(:,1) = x;
 Xk(:,1) = x;
+nsim = length(t);
 
 for i = 1:length(t)-1
    
@@ -114,6 +115,7 @@ for i = 1:length(t)-1
     end
    U(i) = u;
    X(:,i+1) = x;
+   percentage_done_MPC = i/nsim
 end
 
 x = [0;0;0;0];
@@ -138,6 +140,7 @@ for i = 1:length(t)-1
     end
    Uk(i) = u;
    Xk(:,i+1) = x;
+   percentage_done_LQR = i/nsim
 end
 
 subplot(2,2,1)
@@ -161,5 +164,16 @@ subplot(2,2,4)
 plot(t,Uk,'LineWidth',2)
 xlabel('t (sec)')
 legend('u(t)')
+
+%% Saving for animation (uncomment)
+
+% pos = X(1,:);
+% vel = X(2,:);
+% ang = X(3,:);
+% angvel = X(4,:);
+% inp = U;
+% tt = t.';
+% 
+% save('Inverted_Pendulum_on_a_Cart_Movement_MPC.mat','Ts','pos','vel','ang','angvel','inp','tt')
 
 %Program end

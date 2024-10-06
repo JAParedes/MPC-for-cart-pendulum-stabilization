@@ -7,11 +7,11 @@ clc
 import casadi.*;
 %Defining problem sizes
 %N = 30; %Finite Horizon for cart movement
-N = 60; %Finite Horizon for windup
+N = 100; %Finite Horizon for windup
 nx = 4; %Number of states
 nu = 1; %Number of inputs
 %Parameters
-ts = 0.1; %Sampling time
+ts = 0.02; %Sampling time
 x0 = SX.sym('x0',nx);   %State Estimate
 q = SX.sym('q',4,4);    %State weight matrix
 r = SX.sym('r',1,1);    %Input weight matrix
@@ -151,19 +151,20 @@ args.max_sqp_iters = 10;
 %Tolerance for ending OCP program
 args.tol = 1e-4;
 
-xtrg = zeros(4,1); %Wind up maneuver
+xtrg = zeros(4,1); %Wind up and stabilization maneuver
 %xtrg = [50; 0; 0; 0]; %Cart Movement
 
 % Initial Conditions
 x0 = [0;0;pi;0]; %Wind up maneuver
+%x0 = [1;0;pi/5;0]; %Stabilization maneuver
 %x0 = [0;0;0;0]; %Cart movement
 
 % state constraints
-args.xub = [2.5, 10, 10, 10]; %Wind up state constraints
+args.xub = [2.5, 10, 10, 10]; %Wind up and stabilization state constraints
 %args.xub = [105, 15, 1.4, 30]; %Cart movement state constraints
 args.xlb = -args.xub;
 % control constraints
-args.uub = 30*ones(1,1); %Windup ipnut constraints
+args.uub = 30*ones(1,1); %Wind up and stabilization input constraints
 %args.uub = 20*ones(1,1);%Cart movement input constraints
 args.ulb = -args.uub;
 
@@ -196,6 +197,7 @@ t1(1) = 0;
 
 for i = 1:nsim-1
     %NMPC iterative solver
+    tic;
     [u_nmpc,ukm1,xkm1,skm1,lkm1,vkm1,res1(i)] = ...
     nmpc(x,xtrg,ukm1,xkm1,skm1,lkm1,vkm1,args);
     U(:,i) = u_nmpc;
@@ -203,7 +205,7 @@ for i = 1:nsim-1
     x = xm(end,:)';
     X(:,i+1) = x;
     t1(i) = (i-1)*ts;
-    perc = i/nsim
+    percentage_done = i/nsim
 end
 
 X(3,:) = wrapToPi(X(3,:));
@@ -231,5 +233,17 @@ plot(t1,U,'LineWidth',2)
 xlabel('t (sec)')
 ylabel('Horizontal Force (N)')
 legend('u(t)')
+
+%% Saving for animation (uncomment)
+
+% Ts = ts;
+% pos = X(1,:);
+% vel = X(2,:);
+% ang = X(3,:);
+% angvel = X(4,:);
+% inp = U;
+% tt = t1.';
+% 
+% save('Inverted_Pendulum_on_a_Cart_Swing_Up_NMPC.mat','Ts','pos','vel','ang','angvel','inp','tt')
 
 %End Program

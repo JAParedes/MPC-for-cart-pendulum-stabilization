@@ -94,6 +94,7 @@ Xk(:,1) = x;
 u = 0;%Input
 v = 0; %Governed reference
 Kvar = 1; %Used to determine how similar v is to r
+nsim = length(t);
 
 %Reference governor implementation
 for i = 1:length(t)-1
@@ -127,6 +128,7 @@ for i = 1:length(t)-1
     end
    U(i) = u;
    X(:,i+1) = x;
+   percentage_done_RG_LQR = i/nsim
 end
 
 x = [0;0;0;0];
@@ -146,6 +148,7 @@ for i = 1:length(t)-1
     end
    Uk(i) = u;
    Xk(:,i+1) = x;
+   percentage_done_LQR = i/nsim
 end
 
 subplot(3,2,1)
@@ -183,22 +186,18 @@ plot(t,Uk,'LineWidth',2)
 xlabel('t (sec)')
 legend('u(t)')
 
-%Program end
+%% Saving for animation (uncomment)
 
-% function [Q,h] = getMats(A,B,C,D,H,lb,ub,N,eps)
+% pos = X(1,:);
+% vel = X(2,:);
+% ang = X(3,:);
+% angvel = X(4,:);
+% inp = U;
+% tt = t.';
 % 
-%     Q = [H*D H*C; -H*D -H*C];
-%     h = [ub;-lb];
-%     invA = inv(eye(size(A))-A);
-%     for i = 1:N
-%         Q = [Q; H*C*(eye(size(A))-A^i)*invA*B+H*D H*C*A^i;...
-%             -H*C*(eye(size(A))-A^i)*invA*B+H*D -H*C*A^i];
-%         h = [h;ub;-lb];
-%     end
-%     Q = [Q;H*C*invA*B+H*D zeros(size(H*C));...
-%         -H*C*invA*B+H*D -zeros(size(H*C))];
-%      h = [h;(1-eps)*ub;-(1-eps)*lb];
-% end
+% save('Inverted_Pendulum_on_a_Cart_Movement_LQR_RG.mat','Ts','pos','vel','ang','angvel','inp','tt')
+
+%Program end
 
 function [Q,h] = getMats(A,B,C,D,H,K,lb,ub,ulb,uub,N,eps)
     %Obtains matrices to test whether the future states considered within
