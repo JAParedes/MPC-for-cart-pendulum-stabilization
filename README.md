@@ -2,7 +2,7 @@
  Model Predictive Control (MPC) for stabilization of a cart-pendulum system. The files in this repository evaluate LQR, linear MPC, nonlinear MPC and Reference Governor (RG) algorithms. More details about the implementation are given in the **Inverted Pendulum on a Cart system stabilization via MPC control schemes** and **Inverted Pendulum on a Cart system stabilization via MPC control schemes_Presentation** .pdf files.
 
 ## Setup for CasADi in Matlab for Windows
-* Download CasADi binaries from [here](https://web.casadi.org/get/), unzip the files and place them in a directory of your choice. Then, in Matlab, run the following command depending on the file you downloaded.
+Download CasADi binaries from [here](https://web.casadi.org/get/), unzip the files and place them in a directory of your choice. Then, in Matlab, run the following command depending on the file you downloaded.
 ```
 addpath('<yourpath>/casadi-3.6.6)
 ```
